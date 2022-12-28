@@ -198,7 +198,7 @@ campsiteRouter
       .then((campsite) => {
 
 
-        if (!req.user._id.equals(campsite.comments.id(user._id).author)) {
+        if (!req.user._id.equals(campsite.comments.id(user._id).author = req.campsite.comments)) {
           err = new Error("Incorrect User");
           err.status = 403;
           return next(err);
