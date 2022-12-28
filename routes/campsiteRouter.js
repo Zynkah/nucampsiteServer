@@ -1,6 +1,7 @@
 const express = require("express");
 const Campsite = require("../models/campsites");
 const authenticate = require("../authenticate");
+const { ObjectId } = require("mongoose");
 
 const campsiteRouter = express.Router();
 
@@ -198,7 +199,7 @@ campsiteRouter
       .then((campsite) => {
         if (
           !req.user._id.equals(
-            (campsite.comments.id(req.user._id).author = req.campsite.comments)
+            campsite.comments.id(req.user._id).author(campsite.comment.id)
           )
         ) {
           err = new Error("Incorrect User");
