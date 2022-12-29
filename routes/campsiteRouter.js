@@ -197,18 +197,15 @@ campsiteRouter
   .put(authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
       .then((campsite) => {
-
-
         if (
           !req.user._id.equals(
-            campsite.comments.id(req.user._id).author(req.comments.id)
+            campsite.comments.id(req.params.commentId).author._id
           )
         ) {
           err = new Error("Incorrect User");
           err.status = 403;
           return next(err);
         }
-
 
         if (campsite && campsite.comments.id(req.params.commentId)) {
           if (req.body.rating) {
