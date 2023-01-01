@@ -9,7 +9,7 @@ favoriteRouter
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
     Favorite.findOne({ user: req.user._id })
-      .populatek("user")
+      .populate("user")
       .populate("campsites")
       .then((favorite) => {
         res.statusCode = 200;
