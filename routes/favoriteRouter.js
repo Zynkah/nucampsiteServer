@@ -19,36 +19,44 @@ favoriteRouter
       .catch((err) => next(err));
   })
   .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
-    Favorite.findOne({user: req.user._id})
-        .then(favorite => {
-            if (favorite) {
-                req.body.forEach(favoriteCampsite => {
-                    if (!favorite.campsites.includes(favoriteCampsite._id)) {
-                        favorite.campsites.push(favoriteCampsite._id);
-                    }
-                });
-                favorite.save()
-                    .then(favorite => {
-                        res.statusCode = 200;
-                        res.setHeader('Content-Type', 'application/json');
-                        res.json(favorite);
-                    })
-                    .catch(err => next(err));
-            } else {
-                Favorite.create({
-                    user: req.user._id,
-                    campsites: req.body 
-                })
-                    .then(favorite => {
-                        res.statusCode = 200;
-                        res.setHeader('Content-Type', 'application/json');
-                        res.json(favorite);
-                    })
-                    .catch(err => next(err));
+    Favorite.findOne({ user: req.user._id })
+      .then((favorite) => {
+        if (favorite) {
+          req.body.forEach((fav) => {
+            if (!favorite.campsites.includes(fav._id)) {
+              favorite.campsites.push(fav._id);
             }
-        })
-        .catch(err => next(err));
-})
+          });
+          favorite
+            .save()
+            .then((favorite) => {
+              res.statusCode = 200;
+              res.setHeader("Content-Type", "application/json");
+              res.json(favorite);
+            })
+            .catch((err) => next(err));
+        } else {
+          Favorite.create({ user: req.user._id })
+            .then((favorite) => {
+              req.body.forEach((fav) => {
+                if (!favorite.campsites.includes(fav._id)) {
+                  favorite.campsites.push(fav._id);
+                }
+              });
+              favorite
+                .save()
+                .then((favorite) => {
+                  res.statusCode = 200;
+                  res.setHeader("Content-Type", "application/json");
+                  res.json(favorite);
+                })
+                .catch((err) => next(err));
+            })
+            .catch((err) => next(err));
+        }
+      })
+      .catch((err) => next(err));
+  })
   //Unsupported
   .put(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
