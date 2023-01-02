@@ -147,6 +147,7 @@ favoriteRouter
             })
             .catch((err) => next(err));
         } else {
+          res.statusCode = 200;
           res.setHeader("Content-Type", "text/plain");
           res.end("You do not have any favorites to delete.");
         }
